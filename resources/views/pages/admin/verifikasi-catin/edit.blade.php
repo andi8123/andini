@@ -168,25 +168,22 @@
                                     <th scope="col">Status</th>
                                     <th scope="col">Keterangan</th>
                                 </tr>
-
+                            </thead>
+                            <tbody>
                                 @foreach ($semua_persyaratan as $persyaratan_catin)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            @if ($catin->dispensasi->status_persetujuan == 'PROPOSED' && $persyaratan_catin->cp_status !== null)
-                                                <button type="button" class="btn btn-light verif-btn"
-                                                    data-id="{{ $persyaratan_catin->cp_id }}"
-                                                    data-title="{{ $persyaratan_catin->ref_nama_persyaratan }}">
-                                                    <i class="fas fa-pen fs-2"></i>
-                                                </button>
-                                            @else
-                                                <button type="button" class="btn btn-light" disabled>
-                                                    <i
-                                                        class="fas fa-pen
-                                                    fs-2"></i>
-                                                </button>
-                                            @endif
+                                            <button type="button" class="btn btn-light verif-btn"
+                                                data-id="{{ $persyaratan_catin->cp_id }}"
+                                                data-title="{{ $persyaratan_catin->ref_nama_persyaratan }}"
+                                                data-active="{{ ($catin->dispensasi->status_persetujuan == 'PROPOSED' && $persyaratan_catin->cp_status !== null && $persyaratan_catin->cp_status !== 'APPROVED') ? 'true' : 'false' }}"
+                                                @if ($persyaratan_catin->cp_status == 'APPROVED') disabled @endif>
+                                                <i class="fas fa-pen fs-2"></i>
+                                            </button>
                                         </td>
+                                        
+                                        
                                         <td>{{ $persyaratan_catin->ref_nama_persyaratan }}</td>
                                         <td>
                                             @if ($persyaratan_catin->ref_is_wajib)
@@ -194,6 +191,7 @@
                                             @else
                                                 <span class="badge bg-light text-dark">Opsional</span>
                                             @endif
+                                        </td>
                                         <td>
                                             @if ($persyaratan_catin->cp_status == 'SUBMITTED')
                                                 <span class="badge bg-warning">Menunggu Persetujuan</span>
@@ -208,13 +206,10 @@
                                         <td>{{ $persyaratan_catin->cp_keterangan ?? '-' }}</td>
                                     </tr>
                                 @endforeach
-
-                            </thead>
-                            <tbody>
-
                             </tbody>
                         </table>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -266,6 +261,9 @@
 @endsection
 
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
             $('.verif-btn').click(function() {
@@ -325,3 +323,4 @@
         });
     </script>
 @endpush
+
